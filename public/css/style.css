@@ -1,0 +1,669 @@
+:root {
+    --bg-main: #3C96B4;
+    /* Adjusted to match image lighter teal */
+    --bg-dark: #094C62;
+    --color-primary: #87CEEB;
+    /* Lighter blue for buttons/tabs */
+    --color-success: #38B000;
+    --color-danger: #E63946;
+    --text-color: #333;
+    --text-white: #ffffff;
+    --font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    background-color: var(--bg-main);
+    color: var(--text-color);
+    font-family: var(--font-family);
+    height: 100vh;
+    width: 100vw;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Header */
+.app-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 20px;
+    color: var(--text-color);
+}
+
+.header-left {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.header-logo {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    border: 2px dashed #000;
+    padding: 5px;
+    background: transparent;
+    /* Or image */
+}
+
+.header-title {
+    font-size: 1.5rem;
+    font-weight: bold;
+    font-family: serif;
+    /* Matches "Administrador" font in image */
+}
+
+.header-menu {
+    font-size: 1.5rem;
+    cursor: pointer;
+}
+
+/* Navigation Tabs */
+.nav-tabs-container {
+    display: flex;
+    padding: 0 20px;
+    align-items: flex-end;
+}
+
+.nav-tab {
+    padding: 10px 30px;
+    border-radius: 15px 15px 0 0;
+    background-color: var(--color-primary);
+    color: #000;
+    cursor: pointer;
+    font-weight: bold;
+    text-transform: uppercase;
+    font-size: 0.9rem;
+    margin-right: -5px;
+    /* Overlap slightly */
+    z-index: 1;
+    text-decoration: none;
+    display: inline-block;
+}
+
+.nav-tab.active {
+    background-color: white;
+    z-index: 2;
+    padding-top: 15px;
+    /* Make it slightly taller */
+}
+
+/* Main Content Area */
+.content-wrapper {
+    background-color: white;
+    flex: 1;
+    margin: 0 20px 20px 20px;
+    border-radius: 0 20px 20px 20px;
+    /* Top-left is square to merge with tab if first tab is active, but actually images show rounded container */
+    /* Correction: The active tab merges with the white container. */
+    border-top-right-radius: 20px;
+    border-bottom-left-radius: 20px;
+    border-bottom-right-radius: 20px;
+    /* If first tab is active, top-left should be 0. We'll handle this generically or just assume first tab active for now. */
+    padding: 30px;
+    overflow-y: auto;
+    position: relative;
+}
+
+.content-wrapper.tab-1-active {
+    border-top-left-radius: 0;
+}
+
+.content-wrapper.tab-2-active {
+    border-top-left-radius: 20px;
+    /* If 2nd tab active, 1st is not, so corner is rounded? Actually CSS tabs are tricky. Let's stick to a simple white card for now. */
+}
+
+/* Specific overrides for the tab look */
+.nav-tab.active {
+    box-shadow: 0 -5px 10px rgba(0, 0, 0, 0.05);
+}
+
+/* Login Specific */
+.login-body {
+    background-color: var(--bg-main);
+    color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+.login-form-container {
+    text-align: center;
+    width: 100%;
+    max-width: 400px;
+}
+
+.login-label {
+    display: block;
+    text-align: left;
+    font-weight: bold;
+    margin-bottom: 5px;
+    font-size: 0.9rem;
+    text-transform: uppercase;
+}
+
+.login-input {
+    width: 100%;
+    padding: 12px;
+    border-radius: 5px;
+    border: none;
+    margin-bottom: 20px;
+    font-size: 1rem;
+}
+
+.login-btn {
+    background-color: var(--color-primary);
+    color: #000;
+    padding: 10px 40px;
+    border-radius: 20px;
+    border: 1px solid #000;
+    font-weight: bold;
+    cursor: pointer;
+    margin-top: 20px;
+}
+
+.login-input-underline {
+    width: 100%;
+    padding: 5px 0;
+    background: transparent;
+    border: none;
+    border-bottom: 2px solid white;
+    color: white;
+    font-size: 1rem;
+    outline: none;
+    margin-bottom: 20px;
+}
+
+.custom-alert {
+    position: fixed;
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: #ff4444;
+    color: white;
+    padding: 15px 30px;
+    border-radius: 5px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    z-index: 1000;
+    font-weight: bold;
+    display: none;
+    animation: slideDown 0.5s ease-out;
+}
+
+@keyframes slideDown {
+    from {
+        top: -100px;
+        opacity: 0;
+    }
+
+    to {
+        top: 20px;
+        opacity: 1;
+    }
+}
+
+/* Inventory List */
+.inventory-list {
+    max-width: 900px;
+    margin: 0 auto;
+}
+
+.search-container {
+    background-color: #d3d3d3;
+    padding: 10px 20px;
+    border-radius: 5px;
+    display: flex;
+    align-items: center;
+    margin-bottom: 30px;
+    max-width: 900px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.inv-list-item {
+    border-bottom: 2px solid #000;
+    padding: 15px 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-weight: bold;
+    font-size: 1.1rem;
+    transition: background-color 0.2s, color 0.2s;
+    border-radius: 5px;
+}
+
+.inv-list-item:hover {
+    background-color: #094C62;
+    color: white;
+    cursor: pointer;
+}
+
+.inv-list-item:hover .action-icons i {
+    color: white !important;
+}
+
+.action-icons i {
+    font-size: 1.5rem;
+    margin-left: 15px;
+    cursor: pointer;
+}
+
+/* Modals */
+.modal-overlay {
+    background-color: rgba(0, 0, 0, 0.5);
+}
+
+.modal-content-large {
+    background-color: #E0F7FA;
+    /* Light blueish background for modal */
+    padding: 30px;
+    border-radius: 10px;
+    max-width: 800px;
+    width: 90%;
+    position: relative;
+}
+
+.close-btn {
+    position: absolute;
+    top: 10px;
+    right: 15px;
+    font-size: 1.5rem;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+.confirm-overlay {
+    background-color: #094C62;
+    /* Solid dark teal */
+    color: white;
+    /* Ensure text is white */
+}
+
+.confirm-content {
+    display: flex;
+    gap: 20px;
+    text-align: left;
+}
+
+/* Search Input Styling */
+.search-input {
+    background: transparent;
+    border: none;
+    outline: none;
+    font-size: 1.1rem;
+    width: 100%;
+    margin-left: 10px;
+    color: #333;
+    font-family: var(--font-family);
+}
+
+.search-input::placeholder {
+    color: #666;
+    font-weight: bold;
+}
+
+/* Sales Module Styles */
+.product-card-small {
+    min-width: 150px;
+    background-color: #f9f9f9;
+    padding: 10px;
+    border-radius: 10px;
+    text-align: center;
+    border: 1px solid #ddd;
+}
+
+.cart-badge {
+    background-color: red;
+    color: white;
+    border-radius: 50%;
+    padding: 2px 6px;
+    font-size: 0.8rem;
+    position: absolute;
+    top: -5px;
+    right: -5px;
+}
+
+/* ============================================
+   RESPONSIVE DESIGN - MEDIA QUERIES
+   ============================================ */
+
+/* Mobile Small: max-width 576px */
+@media (max-width: 576px) {
+
+    /* Header */
+    .app-header {
+        padding: 8px 15px;
+    }
+
+    .header-logo {
+        width: 45px;
+        height: 45px;
+    }
+
+    .header-title {
+        font-size: 1.1rem;
+    }
+
+    .header-menu {
+        font-size: 1.2rem;
+    }
+
+    /* Navigation Tabs */
+    .nav-tabs-container {
+        padding: 0 10px;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    .nav-tab {
+        padding: 8px 15px;
+        font-size: 0.75rem;
+        white-space: nowrap;
+    }
+
+    /* Content Wrapper */
+    .content-wrapper {
+        margin: 0 10px 10px 10px;
+        padding: 15px;
+        border-radius: 0 15px 15px 15px;
+    }
+
+    /* Login */
+    .login-form-container {
+        max-width: 90%;
+        padding: 0 20px;
+    }
+
+    .login-form-container img {
+        width: 100px !important;
+        height: 100px !important;
+    }
+
+    .login-label {
+        width: 100px !important;
+        font-size: 0.8rem;
+    }
+
+    .login-input-underline {
+        font-size: 0.9rem;
+    }
+
+    .login-btn {
+        padding: 8px 30px;
+        font-size: 0.9rem;
+    }
+
+    /* Search Container */
+    .search-container {
+        padding: 8px 15px;
+        max-width: 100%;
+    }
+
+    .search-input {
+        font-size: 1rem;
+    }
+
+    /* Inventory List - Transform to Cards */
+    .inventory-list {
+        max-width: 100%;
+    }
+
+    .inv-list-item {
+        flex-direction: column;
+        align-items: flex-start;
+        padding: 15px;
+        gap: 10px;
+    }
+
+    .inv-list-item>span:first-child {
+        width: 100%;
+        font-size: 1rem;
+    }
+
+    .action-icons {
+        width: 100%;
+        display: flex;
+        justify-content: flex-end;
+        gap: 20px;
+    }
+
+    .action-icons i {
+        font-size: 1.8rem;
+        margin-left: 0;
+    }
+
+    /* Admin Module - Sidebar */
+    .admin-layout {
+        flex-direction: column;
+        gap: 20px;
+    }
+
+    .admin-sidebar {
+        width: 100%;
+        flex-direction: row;
+        overflow-x: auto;
+        gap: 10px;
+    }
+
+    .sidebar-btn {
+        white-space: nowrap;
+        padding: 12px 20px;
+        font-size: 0.9rem;
+    }
+
+    .admin-content {
+        width: 100%;
+    }
+
+    /* Sales Module */
+    .sales-layout {
+        padding-top: 15px;
+    }
+
+    .initial-view {
+        max-width: 100%;
+    }
+
+    /* Stack search and selector vertically */
+    .initial-view>div>div:first-child {
+        flex-direction: column !important;
+        gap: 15px !important;
+    }
+
+    .search-container {
+        margin-bottom: 0 !important;
+    }
+
+    /* Suggested Products */
+    .product-card-small {
+        min-width: 140px;
+    }
+
+    /* Floating Cart Button */
+    #floatingCartBtn {
+        bottom: 15px;
+        right: 15px;
+        padding: 12px 20px;
+        font-size: 1rem;
+    }
+
+    #floatingCartBtn span:first-child {
+        font-size: 1rem;
+    }
+
+    #floatingCartBtn i {
+        font-size: 1.3rem;
+    }
+
+    /* Payment View */
+    .payment-view>div {
+        flex-direction: column !important;
+    }
+
+    .product-list-box {
+        height: 200px;
+        margin-bottom: 20px;
+    }
+
+    .payment-panel {
+        max-width: 100%;
+    }
+
+    .payment-row {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 8px;
+    }
+
+    .payment-label {
+        font-size: 1rem;
+    }
+
+    .payment-input {
+        width: 100%;
+    }
+
+    /* Modals */
+    .modal-content-large {
+        width: 95%;
+        max-width: 95vw;
+        padding: 20px 15px;
+    }
+
+    .close-btn {
+        font-size: 1.8rem;
+        top: 8px;
+        right: 12px;
+    }
+
+    /* Modal Forms - Stack vertically */
+    .modal-content-large>div[style*="display: flex"] {
+        flex-direction: column !important;
+    }
+
+    /* Category Modal Grid */
+    .category-grid {
+        grid-template-columns: 1fr !important;
+        gap: 15px;
+    }
+
+    .category-img {
+        height: 120px;
+    }
+
+    /* Product Modal */
+    #productModal .modal-content-large>div {
+        flex-direction: column !important;
+    }
+}
+
+/* Tablet: 577px - 992px */
+@media (min-width: 577px) and (max-width: 992px) {
+
+    /* Header */
+    .header-logo {
+        width: 50px;
+        height: 50px;
+    }
+
+    .header-title {
+        font-size: 1.3rem;
+    }
+
+    /* Navigation */
+    .nav-tab {
+        padding: 10px 20px;
+        font-size: 0.85rem;
+    }
+
+    /* Content */
+    .content-wrapper {
+        margin: 0 15px 15px 15px;
+        padding: 20px;
+    }
+
+    /* Login */
+    .login-form-container {
+        max-width: 450px;
+    }
+
+    /* Search */
+    .search-container {
+        max-width: 100%;
+    }
+
+    /* Inventory */
+    .inventory-list {
+        max-width: 100%;
+    }
+
+    /* Admin Sidebar */
+    .admin-sidebar {
+        width: 200px;
+    }
+
+    .sidebar-btn {
+        padding: 12px;
+        font-size: 0.95rem;
+    }
+
+    /* Category Grid - 2 columns */
+    .category-grid {
+        grid-template-columns: repeat(2, 1fr) !important;
+    }
+
+    /* Modals */
+    .modal-content-large {
+        width: 85%;
+        max-width: 700px;
+    }
+
+    /* Floating Cart */
+    #floatingCartBtn {
+        padding: 12px 25px;
+    }
+
+    /* Suggested Products Grid */
+    #suggestedProductsList {
+        display: grid !important;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 15px;
+        overflow-x: visible;
+    }
+}
+
+/* Desktop optimizations (993px+) */
+@media (min-width: 993px) {
+
+    /* Ensure max-widths for readability */
+    .inventory-list,
+    .search-container {
+        max-width: 900px;
+    }
+
+    .payment-panel {
+        max-width: 500px;
+    }
+}
+
+/* Utility Classes */
+@media (max-width: 576px) {
+    .hide-mobile {
+        display: none !important;
+    }
+}
+
+@media (min-width: 577px) {
+    .show-mobile {
+        display: none !important;
+    }
+}

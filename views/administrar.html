@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Administrar - Tienda JR</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="/css/style.css">
+    <style>
+        .admin-layout {
+            display: flex;
+            gap: 50px;
+            padding-top: 50px;
+        }
+
+        .admin-sidebar {
+            width: 250px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .sidebar-btn {
+            padding: 15px;
+            border: 1px solid #999;
+            border-radius: 10px;
+            background-color: white;
+            cursor: pointer;
+            text-align: left;
+            font-weight: bold;
+            color: #666;
+            font-size: 1rem;
+        }
+
+        .sidebar-btn.active {
+            background-color: #AEEEEE;
+            /* Light cyan matching active state */
+            border-color: #53D4FF;
+            color: #333;
+        }
+
+        .admin-content {
+            flex: 1;
+        }
+
+        .date-input-group {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .date-input-wrapper {
+            position: relative;
+            display: flex;
+            align-items: center;
+        }
+
+        .date-input {
+            padding: 5px 10px;
+            border: 1px solid #333;
+            border-radius: 5px;
+            width: 150px;
+            text-align: center;
+        }
+
+        .calendar-icon {
+            font-size: 2rem;
+            margin-left: 10px;
+            color: #333;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Header -->
+    <header class="app-header">
+        <div class="header-left">
+            <div class="header-logo"
+                style="display: flex; align-items: center; justify-content: center; font-size: 0.5rem; text-align: center; border: 2px dashed black;">
+                Tienda<br>de ropa<br>JR
+            </div>
+            <div class="header-title">Administrador</div>
+        </div>
+        <div class="header-menu" style="position: relative;">
+            <i class="fas fa-bars" onclick="toggleMenu()" style="cursor: pointer;"></i>
+            <div id="menuDropdown"
+                style="display: none; position: absolute; top: 30px; right: 0; background-color: white; border: 1px solid #ccc; border-radius: 5px; box-shadow: 0 2px 5px rgba(0,0,0,0.2); z-index: 1000;">
+                <div onclick="handleLogout()"
+                    style="padding: 10px 20px; white-space: nowrap; cursor: pointer; font-weight: bold; color: #333; font-size: 0.9rem;">
+                    Cerrar Sesión
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Tabs -->
+    <div class="nav-tabs-container">
+        <a href="/inventario" class="nav-tab">INVENTARIO</a>
+        <a href="/ventas" class="nav-tab">VENTAS</a>
+        <div class="nav-tab active">ADMINISTRAR</div>
+    </div>
+
+    <!-- Content -->
+    <div class="content-wrapper">
+        <div class="admin-layout">
+            <div class="admin-sidebar">
+                <button class="sidebar-btn active" onclick="showSection('history')">Historial de ventas</button>
+                <button class="sidebar-btn" onclick="showSection('users')">Configuración de usuarios</button>
+            </div>
+
+            <div class="admin-content">
+                <!-- Sales History Section -->
+                <div id="historySection" style="max-width: 800px; margin: 0 auto;">
+                    <div
+                        style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 50px; max-width: 800px;">
+                        <div class="date-input-group">
+                            <label style="font-weight: bold;">Fecha inc</label>
+                            <div class="date-input-wrapper">
+                                <input type="text" value="03/05/2025" class="date-input">
+                                <i class="far fa-calendar-alt calendar-icon"></i>
+                            </div>
+                        </div>
+
+                        <div class="date-input-group">
+                            <label style="font-weight: bold;">Fecha fin</label>
+                            <div class="date-input-wrapper">
+                                <input type="text" value="03/10/2025" class="date-input">
+                                <i class="far fa-calendar-alt calendar-icon"></i>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div style="text-align: center; max-width: 800px;">
+                        <button onclick="openReportModal()"
+                            style="background-color: #AEEEEE; border: 1px solid #333; padding: 10px 30px; border-radius: 20px; font-weight: bold; cursor: pointer;">Generar
+                            reporte</button>
+                    </div>
+                </div>
+
+                <!-- User Config Section (Hidden by default) -->
+                <div id="usersSection" style="display: none; position: relative; min-height: 400px;">
+                    <!-- Create Button at Top Right -->
+                    <div style="text-align: right; margin-bottom: 20px;">
+                        <button onclick="showCreateUserView()"
+                            style="background-color: #AEEEEE; border: 1px solid #333; padding: 10px 30px; border-radius: 20px; font-weight: bold; cursor: pointer;">Crear
+                            nuevo usuario</button>
+                    </div>
+
+                    <!-- User List -->
+                    <div class="user-list">
+                        <div class="inv-list-item" style="border-bottom: 1px solid #ccc; padding: 10px 0;">
+                            <div style="font-size: 1.1rem; font-weight: bold;">Juan Perez</div>
+                            <div class="action-icons">
+                                <i class="fas fa-pencil-alt" onclick="openEditUserModal()"></i>
+                                <i class="fas fa-trash-alt" style="color: var(--color-danger);"
+                                    onclick="openDeleteUserModal()"></i>
+                            </div>
+                        </div>
+                        <div class="inv-list-item" style="border-bottom: 1px solid #ccc; padding: 10px 0;">
+                            <div style="font-size: 1.1rem; font-weight: bold;">Claudia Patricia</div>
+                            <div class="action-icons">
+                                <i class="fas fa-pencil-alt" onclick="openEditUserModal()"></i>
+                                <i class="fas fa-trash-alt" style="color: var(--color-danger);"
+                                    onclick="openDeleteUserModal()"></i>
+                            </div>
+                        </div>
+                        <div class="inv-list-item" style="border-bottom: 1px solid #ccc; padding: 10px 0;">
+                            <div style="font-size: 1.1rem; font-weight: bold;">Tatiana Espinosa</div>
+                            <div class="action-icons">
+                                <i class="fas fa-pencil-alt" onclick="openEditUserModal()"></i>
+                                <i class="fas fa-trash-alt" style="color: var(--color-danger);"
+                                    onclick="openDeleteUserModal()"></i>
+                            </div>
+                        </div>
+                    </div>
+
+
+                </div>
+
+                <!-- Create User Section (Hidden by default) -->
+                <div id="createUserSection" style="display: none; position: relative; min-height: 400px;">
+                    <div style="margin-bottom: 20px;">
+                        <i class="fas fa-arrow-left" style="font-size: 1.5rem; cursor: pointer;"
+                            onclick="hideCreateUserView()"></i>
+                    </div>
+
+                    <div style="text-align: center; margin-bottom: 30px;">
+                        <h2 style="font-family: serif;">Crear nuevo usuario</h2>
+                    </div>
+
+                    <div style="display: flex; justify-content: center; gap: 50px; align-items: flex-start;">
+                        <!-- Form Fields -->
+                        <div style="display: flex; flex-direction: column; gap: 20px; width: 400px;">
+                            <div style="display: flex; align-items: center; justify-content: space-between;">
+                                <label style="font-weight: bold; font-size: 1.1rem;">Nombre:</label>
+                                <input type="text" id="newUserName"
+                                    style="padding: 8px; border-radius: 5px; border: 1px solid #333; width: 65%;">
+                            </div>
+                            <div style="display: flex; align-items: center; justify-content: space-between;">
+                                <label style="font-weight: bold; font-size: 1.1rem;">Correo:</label>
+                                <input type="text" id="newUserEmail"
+                                    style="padding: 8px; border-radius: 5px; border: 1px solid #333; width: 65%;">
+                            </div>
+                            <div style="display: flex; align-items: center; justify-content: space-between;">
+                                <label style="font-weight: bold; font-size: 1.1rem;">Número:</label>
+                                <input type="text" id="newUserPhone"
+                                    style="padding: 8px; border-radius: 5px; border: 1px solid #333; width: 65%;">
+                            </div>
+                            <div style="display: flex; align-items: center; justify-content: space-between;">
+                                <label style="font-weight: bold; font-size: 1.1rem;">Cargo:</label>
+                                <input type="text" id="newUserRole"
+                                    style="padding: 8px; border-radius: 5px; border: 1px solid #333; width: 65%;">
+                            </div>
+                        </div>
+
+                        <!-- Image Placeholder -->
+                        <div style="display: flex; flex-direction: column; align-items: center; gap: 10px;">
+                            <div
+                                style="width: 150px; height: 150px; border: 5px solid #ccc; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: #ccc; background-color: #f0f0f0;">
+                                <i class="fas fa-user" style="font-size: 5rem;"></i>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div style="text-align: right; margin-top: 50px; margin-right: 50px;">
+                        <button onclick="saveNewUser()"
+                            style="background-color: #AEEEEE; border: 1px solid #333; padding: 10px 40px; border-radius: 20px; font-weight: bold; cursor: pointer; font-size: 1.1rem;">Guardar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Report Modal -->
+    <div id="reportModal" class="modal-overlay"
+        style="display: none; justify-content: center; align-items: center; position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 1000;">
+        <div class="modal-content-large" style="background-color: white; max-width: 500px; text-align: center;">
+            <h2>Descargar Reporte</h2>
+            <div style="display: flex; justify-content: center; gap: 20px; margin: 30px 0;">
+                <button
+                    style="width: 80px; height: 80px; background-color: #38B000; color: white; border: none; border-radius: 10px; font-weight: bold; cursor: pointer;">EXCEL</button>
+                <button
+                    style="width: 80px; height: 80px; background-color: #E63946; color: white; border: none; border-radius: 10px; font-weight: bold; cursor: pointer;">PDF</button>
+                <button
+                    style="width: 80px; height: 80px; background-color: #38B000; color: white; border: none; border-radius: 10px; font-weight: bold; cursor: pointer;">CSV</button>
+            </div>
+            <button onclick="closeModal('reportModal')"
+                style="padding: 10px 30px; border-radius: 20px; border: 1px solid #333; cursor: pointer;">Cerrar</button>
+        </div>
+    </div>
+
+    <!-- Edit/Create User Modal -->
+    <div id="editUserModal" class="modal-overlay"
+        style="display: none; justify-content: center; align-items: center; position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 1000;">
+        <div class="modal-content-large"
+            style="background-color: #F0F8FF; max-width: 700px; padding: 40px; position: relative;">
+            <span class="close-btn" onclick="closeModal('editUserModal')">X</span>
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 30px; align-items: start;">
+                <!-- Form Fields -->
+                <div style="display: flex; flex-direction: column; gap: 15px;">
+                    <div style="display: flex; align-items: center; justify-content: space-between;">
+                        <label style="font-weight: bold;">Nombre:</label>
+                        <input type="text" id="editUserName" value="Tatiana Espinosa"
+                            style="padding: 5px; border-radius: 5px; border: 1px solid #333; width: 60%;">
+                    </div>
+                    <div style="display: flex; align-items: center; justify-content: space-between;">
+                        <label style="font-weight: bold;">Correo:</label>
+                        <input type="text" id="editUserEmail" value="TatES@gmail.com"
+                            style="padding: 5px; border-radius: 5px; border: 1px solid #333; width: 60%;">
+                    </div>
+                    <div style="display: flex; align-items: center; justify-content: space-between;">
+                        <label style="font-weight: bold;">Número:</label>
+                        <input type="text" id="editUserPhone" value="3143070987"
+                            style="padding: 5px; border-radius: 5px; border: 1px solid #333; width: 60%;">
+                    </div>
+                    <div style="display: flex; align-items: center; justify-content: space-between;">
+                        <label style="font-weight: bold;">Cargo:</label>
+                        <select style="padding: 5px; border-radius: 5px; border: 1px solid #333; width: 60%;">
+                            <option>Vendedor</option>
+                            <option>Administrador</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Image Placeholder -->
+                <div style="display: flex; justify-content: center;">
+                    <div
+                        style="width: 150px; height: 150px; background-color: #E0E0E0; border-radius: 50%; border: 1px solid #999; display: flex; align-items: center; justify-content: center; overflow: hidden; color: #666;">
+                        <i class="fas fa-user" style="font-size: 5rem;"></i>
+                    </div>
+                </div>
+            </div>
+
+            <div style="text-align: center; margin-top: 30px;">
+                <button onclick="saveEditUser()"
+                    style="background-color: #AEEEEE; border: 1px solid #333; padding: 10px 30px; border-radius: 20px; font-weight: bold; cursor: pointer;">Guardar
+                    cambios</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Delete User Modal -->
+    <div id="deleteUserModal" class="modal-overlay"
+        style="display: none; justify-content: center; align-items: center; position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 1000;">
+        <div class="modal-content-large"
+            style="background-color: #F0F8FF; max-width: 600px; padding: 40px; position: relative; text-align: center;">
+            <span class="close-btn" onclick="closeModal('deleteUserModal')">X</span>
+
+            <h2 style="font-family: serif; margin-bottom: 30px;">¿Esta seguro en eliminar el usuario?</h2>
+
+            <div style="display: flex; justify-content: center; gap: 30px; align-items: center; margin-bottom: 30px;">
+                <div style="text-align: left;">
+                    <p><strong>Nombre:</strong> <span id="deleteUserName"></span></p>
+                    <p><strong>Cargo:</strong> <span id="deleteUserRole"></span></p>
+                    <p><strong>Correo electronico:</strong> <span id="deleteUserEmail"></span></p>
+                    <p><strong>Número:</strong> <span id="deleteUserPhone"></span></p>
+                </div>
+                <div
+                    style="width: 150px; height: 150px; background-color: #E0E0E0; border-radius: 50%; border: 1px solid #999; display: flex; align-items: center; justify-content: center; overflow: hidden; color: #666;">
+                    <i class="fas fa-user" style="font-size: 5rem;"></i>
+                </div>
+            </div>
+
+            <div style="display: flex; justify-content: center; gap: 20px;">
+                <button onclick="closeModal('deleteUserModal')"
+                    style="background-color: #90EE90; border: 1px solid #333; padding: 10px 30px; border-radius: 20px; font-weight: bold; cursor: pointer;">Conservar</button>
+                <button onclick="confirmDeleteUser()"
+                    style="background-color: #FF4444; color: white; border: 1px solid #333; padding: 10px 30px; border-radius: 20px; font-weight: bold; cursor: pointer;">Eliminar</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Success Create User Modal -->
+    <div id="successCreateUserModal" class="modal-overlay"
+        style="display: none; justify-content: center; align-items: center; position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 1000;">
+        <div class="modal-content-large"
+            style="background-color: #F0F8FF; max-width: 600px; padding: 40px; position: relative; text-align: center;">
+            <span class="close-btn" onclick="closeModal('successCreateUserModal')">X</span>
+
+            <h2 style="font-family: serif; font-size: 2rem; margin-bottom: 30px;">El usuario se registro con éxito</h2>
+
+            <div style="display: flex; justify-content: center;">
+                <button onclick="closeModal('successCreateUserModal')"
+                    style="background-color: #AEEEEE; border: 1px solid #333; padding: 10px 50px; border-radius: 20px; font-weight: bold; cursor: pointer;">OK</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="/js/main.js"></script>
+    <script>
+        function showSection(section) {
+            document.getElementById('usersSection').style.display = section === 'users' ? 'block' : 'none';
+            document.getElementById('historySection').style.display = section === 'history' ? 'block' : 'none';
+
+            const btns = document.querySelectorAll('.sidebar-btn');
+            btns.forEach(btn => btn.classList.remove('active'));
+            if (section === 'users') btns[1].classList.add('active');
+            else btns[0].classList.add('active');
+        }
+
+        function openReportModal() {
+            document.getElementById('reportModal').style.display = 'flex';
+        }
+    </script>
+</body>
+
+</html>
