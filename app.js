@@ -3,16 +3,23 @@ const path = require('path');
 const app = express();
 const port = 3000;
 
-// Serve static files
+// Serve static files from public folder
 app.use(express.static(path.join(__dirname, 'public')));
+
+// Serve root directory for index.html
+app.use(express.static(__dirname));
 
 // Routes
 app.get('/', (req, res) => {
-    res.redirect('/login');
+    res.sendFile(path.join(__dirname, 'index.html'));
 });
 
 app.get('/login', (req, res) => {
-    res.sendFile(path.join(__dirname, 'views', 'login.html'));
+    res.sendFile(path.join(__dirname, 'index.html'));
+});
+
+app.get('/index.html', (req, res) => {
+    res.sendFile(path.join(__dirname, 'index.html'));
 });
 
 app.get('/menu', (req, res) => {
