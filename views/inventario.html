@@ -6,11 +6,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Inventario - Tienda JR</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <link rel="stylesheet" href="../public/css/style.css">
+    <link rel="stylesheet" href="/css/style.css">
 </head>
 
 <body>
-    <!-- Header -->
+
     <header class="app-header">
         <div class="header-left">
             <div class="header-logo"
@@ -31,14 +31,14 @@
         </div>
     </header>
 
-    <!-- Tabs -->
+
     <div class="nav-tabs-container">
         <div class="nav-tab active">INVENTARIO</div>
         <a href="/ventas" class="nav-tab">VENTAS</a>
         <a href="/administrar" class="nav-tab">ADMINISTRAR</a>
     </div>
 
-    <!-- Content -->
+
     <div class="content-wrapper tab-1-active">
         <div class="search-container">
             <i class="fas fa-search" style="font-size: 1.5rem;"></i>
@@ -46,7 +46,7 @@
         </div>
 
         <div id="inventoryListContainer" class="inventory-list">
-            <!-- Dynamic Content -->
+
         </div>
 
         <a href="/inventario/registrar" class="btn"
@@ -54,7 +54,7 @@
             Producto</a>
     </div>
 
-    <!-- Edit Modal (Image 1) -->
+
     <div id="editModal" class="modal-overlay"
         style="display: none; justify-content: center; align-items: center; position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 100;">
         <div class="modal-content-large" style="background-color: #F0FDFF; max-width: 700px;">
@@ -110,9 +110,9 @@
                     </div>
                 </div>
 
-                <div style="width: 200px;">
-                    <img src="https://via.placeholder.com/200x300"
-                        style="width: 100%; height: auto; border-radius: 5px;">
+                <div style="width: 150px;">
+                    <img id="editProductImage" src="https://via.placeholder.com/200x300"
+                        style="width: 100%; max-height: 250px; object-fit: contain; border-radius: 5px;">
                 </div>
             </div>
 
@@ -124,7 +124,7 @@
         </div>
     </div>
 
-    <!-- Confirm Edit Modal (Image 2) -->
+
     <div id="confirmEditModal" class="modal-overlay"
         style="display: none; justify-content: center; align-items: center; position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 200; background-color: #094C62;">
         <div style="width: 100%; max-width: 700px; position: relative; color: white;">
@@ -143,7 +143,8 @@
                     <p id="confirmTotal">Costo total en stock : 350000 COP</p>
                 </div>
                 <div>
-                    <img src="https://via.placeholder.com/200x300" style="border-radius: 5px;">
+                    <img id="confirmEditImage" src="https://via.placeholder.com/200x300"
+                        style="max-width: 150px; max-height: 250px; object-fit: contain; border-radius: 5px;">
                 </div>
             </div>
 
@@ -156,20 +157,21 @@
         </div>
     </div>
 
-    <!-- Success Edit Modal (Image 3) -->
+
     <div id="successModal" class="modal-overlay"
         style="display: none; justify-content: center; align-items: center; position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 300;">
         <div class="modal-content-large" style="text-align: center; max-width: 500px; background-color: #F0FDFF;">
             <div class="close-btn" onclick="closeModal('successModal')">X</div>
             <h2 style="font-family: serif; font-size: 1.8rem; margin-bottom: 20px;">EL PRODUCTO SE EDITO CON ÉXITO</h2>
-            <img src="https://via.placeholder.com/150x200" style="border-radius: 5px; margin-bottom: 20px;">
+            <img id="successEditImage" src="https://via.placeholder.com/150x200"
+                style="max-width: 120px; max-height: 180px; object-fit: contain; border-radius: 5px; margin-bottom: 20px;">
             <br>
             <button onclick="closeModal('successModal')"
                 style="background-color: var(--color-primary); padding: 10px 40px; border-radius: 20px; border: 1px solid #000; font-weight: bold; cursor: pointer;">OK</button>
         </div>
     </div>
 
-    <!-- Delete Modal (Image 4) -->
+
     <div id="deleteModal" class="modal-overlay"
         style="display: none; justify-content: center; align-items: center; position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 100;">
         <div class="modal-content-large" style="background-color: #F0FDFF; max-width: 600px; text-align: center;">
@@ -179,10 +181,11 @@
 
             <div style="display: flex; justify-content: center; gap: 30px; text-align: left; margin-bottom: 30px;">
                 <div style="font-size: 1.1rem; line-height: 1.6;" id="deleteProductDetails">
-                    <!-- Dynamic Details -->
+
                 </div>
                 <div>
-                    <img src="https://via.placeholder.com/150x200" style="border-radius: 5px;">
+                    <img id="deleteProductImage" src="https://via.placeholder.com/150x200"
+                        style="max-width: 120px; max-height: 180px; object-fit: contain; border-radius: 5px;">
                 </div>
             </div>
 
@@ -195,21 +198,22 @@
         </div>
     </div>
 
-    <!-- Success Delete Modal (New) -->
+
     <div id="successDeleteModal" class="modal-overlay"
         style="display: none; justify-content: center; align-items: center; position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 300;">
         <div class="modal-content-large" style="text-align: center; max-width: 500px; background-color: #F0FDFF;">
             <div class="close-btn" onclick="closeModal('successDeleteModal')">X</div>
             <h2 style="font-family: serif; font-size: 1.8rem; margin-bottom: 20px;">EL PRODUCTO SE ELIMINO CON ÉXITO
             </h2>
-            <img src="https://via.placeholder.com/150x200" style="border-radius: 5px; margin-bottom: 20px;">
+            <img id="successDeleteImage" src="https://via.placeholder.com/150x200"
+                style="max-width: 120px; max-height: 180px; object-fit: contain; border-radius: 5px; margin-bottom: 20px;">
             <br>
             <button onclick="closeModal('successDeleteModal')"
                 style="background-color: var(--color-primary); padding: 10px 40px; border-radius: 20px; border: 1px solid #000; font-weight: bold; cursor: pointer;">OK</button>
         </div>
     </div>
 
-    <script src="../public/js/main.js"></script>
+    <script src="/js/main.js"></script>
 </body>
 
 </html>

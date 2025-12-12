@@ -1,11 +1,9 @@
-// --- DATA MANAGEMENT ---
 
-// Default Data
 const defaultProducts = [
-    { id: 1, name: 'Pantalon floreado', code: '001', price: 35000, stock: 10, type: 'Pantalon' },
-    { id: 2, name: 'Chaqueta de peluche', code: '002', price: 85000, stock: 5, type: 'Chaqueta' },
-    { id: 3, name: 'Vestido floreado', code: '003', price: 45000, stock: 8, type: 'Vestido' },
-    { id: 4, name: 'Vestido', code: '004', price: 40000, stock: 12, type: 'Vestido' }
+    { id: 1, name: 'Pantalon floreado', code: '001', price: 35000, stock: 10, type: 'Pantalon', image: '/img/Pantalon floreado.png' },
+    { id: 2, name: 'Chaqueta de peluche', code: '002', price: 85000, stock: 5, type: 'Chaqueta', image: '/img/Chaqueta de peluche.png' },
+    { id: 3, name: 'Vestido floreado', code: '003', price: 45000, stock: 8, type: 'Vestido', image: '/img/Vestido_floreado.png' },
+    { id: 4, name: 'Vestido', code: '004', price: 40000, stock: 12, type: 'Vestido', image: '/img/Vestidos.png' }
 ];
 
 const defaultUsers = [
@@ -14,10 +12,19 @@ const defaultUsers = [
     { id: 3, name: 'Tatiana Espinosa', email: 'TatES@gmail.com', phone: '3143070987', role: 'Vendedor' }
 ];
 
-// Load Data
 function loadData() {
     if (!localStorage.getItem('products')) {
         localStorage.setItem('products', JSON.stringify(defaultProducts));
+    } else {
+        const existingProducts = JSON.parse(localStorage.getItem('products'));
+        const updatedProducts = existingProducts.map(product => {
+            const defaultProduct = defaultProducts.find(dp => dp.id === product.id);
+            if (defaultProduct && defaultProduct.image && !product.image) {
+                return { ...product, image: defaultProduct.image };
+            }
+            return product;
+        });
+        localStorage.setItem('products', JSON.stringify(updatedProducts));
     }
     if (!localStorage.getItem('users')) {
         localStorage.setItem('users', JSON.stringify(defaultUsers));
@@ -51,11 +58,9 @@ function saveCart(cart) {
     localStorage.setItem('cart', JSON.stringify(cart));
 }
 
-// Initialize on load
 document.addEventListener('DOMContentLoaded', () => {
     loadData();
 
-    // Check which page we are on and render accordingly
     if (document.getElementById('inventoryListContainer')) {
         renderProducts();
         const searchInput = document.getElementById('searchInput');
@@ -74,7 +79,6 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 
-// --- SHARED UI FUNCTIONS ---
 function openModal(modalId) {
     const modal = document.getElementById(modalId);
     if (modal) modal.style.display = 'flex';
@@ -86,7 +90,6 @@ function closeModal(modalId) {
 }
 
 
-// --- INVENTORY MODULE ---
 
 let productToDeleteId = null;
 
@@ -127,6 +130,11 @@ function handleEdit(id) {
     document.getElementById('editStock').value = product.stock;
     document.getElementById('editType').value = product.type;
 
+    const editImage = document.getElementById('editProductImage');
+    if (editImage && product.image) {
+        editImage.src = product.image;
+    }
+
     document.getElementById('editModal').dataset.productId = id;
 
     updateTotalCost();
@@ -159,6 +167,12 @@ function openConfirmEditModal() {
     document.getElementById('confirmType').innerText = `Tipo de perenda: ${type}`;
     document.getElementById('confirmTotal').innerText = `Costo total en stock : ${total} COP`;
 
+    const editImage = document.getElementById('editProductImage');
+    const confirmImage = document.getElementById('confirmEditImage');
+    if (editImage && confirmImage && editImage.src) {
+        confirmImage.src = editImage.src;
+    }
+
     openModal('confirmEditModal');
 }
 
@@ -180,6 +194,13 @@ function showSuccessEdit() {
 
     closeModal('confirmEditModal');
     closeModal('editModal');
+
+    const confirmImage = document.getElementById('confirmEditImage');
+    const successImage = document.getElementById('successEditImage');
+    if (confirmImage && successImage && confirmImage.src) {
+        successImage.src = confirmImage.src;
+    }
+
     openModal('successModal');
 }
 
@@ -197,6 +218,12 @@ function handleDelete(id) {
         <p>Costo total en stock : ${product.price * product.stock} COP</p>
     `;
     document.getElementById('deleteProductDetails').innerHTML = details;
+
+    const deleteImage = document.getElementById('deleteProductImage');
+    if (deleteImage && product.image) {
+        deleteImage.src = product.image;
+    }
+
     openModal('deleteModal');
 }
 
@@ -209,19 +236,19 @@ function showSuccessDelete() {
         renderProducts();
     }
     closeModal('deleteModal');
+
+    const deleteImage = document.getElementById('deleteProductImage');
+    const successDeleteImage = document.getElementById('successDeleteImage');
+    if (deleteImage && successDeleteImage && deleteImage.src) {
+        successDeleteImage.src = deleteImage.src;
+    }
+
     openModal('successDeleteModal');
 }
 
-// Registration (registrar.html)
 function saveProduct() {
-    // In a real app we would get values from inputs, but for this prototype we might just add a dummy or read the inputs if they exist
-    // Let's try to read inputs if we are on the register page
-    const codeInput = document.querySelector('.register-form-container input[value="001"]'); // Targeting by value is risky if user changed it, but let's assume structure
-    // Better to use relative position or add IDs in HTML. I will add IDs in HTML later.
-    // For now, let's just create a new product object
+    const codeInput = document.querySelector('.register-form-container input[value="001"]');
 
-    // NOTE: I will need to update registrar.html to have IDs for these inputs to work properly.
-    // Assuming IDs will be added: regCode, regName, regPrice, regStock, regType
 
     const code = document.getElementById('regCode') ? document.getElementById('regCode').value : 'NEW001';
     const name = document.getElementById('regName') ? document.getElementById('regName').value : 'Nuevo Producto';
@@ -257,7 +284,6 @@ function updateRegTotalCost() {
     }
 }
 
-// Add listeners for registration form
 document.addEventListener('DOMContentLoaded', () => {
     const regPrice = document.getElementById('regPrice');
     const regStock = document.getElementById('regStock');
@@ -269,7 +295,6 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 
-// --- SALES MODULE ---
 
 function handleSearchKeyPress(event) {
     if (event.key === 'Enter') {
@@ -294,7 +319,7 @@ function handleSearch(code) {
         const quantity = cartItem ? cartItem.quantity : 1;
 
         card.innerHTML = `
-            <img src="https://via.placeholder.com/100x150" style="border-radius: 5px;">
+            <img src="${product.image || '/img/Vestidos.png'}" style="width: 100px; height: 150px; object-fit: cover; border-radius: 5px;">
             <div style="flex: 1;">
                 <h3 style="margin-bottom: 5px;">${product.name} // ${product.code}</h3>
                 <p style="font-weight: bold; margin-bottom: 10px;">$${product.price}</p>
@@ -332,7 +357,6 @@ function addToCartById(id) {
     updateCartCounter();
     saveCart(cart);
     updateCartCounter();
-    // alert('Producto agregado al carrito'); // Removed alert
 }
 
 function updateCartCounter() {
@@ -359,14 +383,12 @@ function updateCartCounter() {
 }
 
 function showSearchResult() {
-    // Legacy function, kept if needed or redirected
 }
 
 function showPaymentView() {
     document.getElementById('initialView').style.display = 'none';
     document.getElementById('paymentView').style.display = 'block';
 
-    // Hide floating button
     const btn = document.getElementById('floatingCartBtn');
     if (btn) btn.style.display = 'none';
 
@@ -381,12 +403,12 @@ function toggleCartView() {
     if (paymentView.style.display === 'block') {
         paymentView.style.display = 'none';
         initialView.style.display = 'block';
-        if (btn) btn.style.display = 'flex'; // Show button
+        if (btn) btn.style.display = 'flex';
     } else {
         initialView.style.display = 'none';
         paymentView.style.display = 'block';
         renderCart();
-        if (btn) btn.style.display = 'none'; // Hide button
+        if (btn) btn.style.display = 'none';
     }
 }
 
@@ -396,33 +418,35 @@ function openCategoryModal() {
 }
 
 function renderCategories() {
-    const categories = ['Pantalones', 'Chaquetas', 'Camisas', 'Vestidos', 'Interiores'];
     const grid = document.querySelector('.category-grid');
     if (!grid) return;
 
     grid.innerHTML = '';
 
-    // Group 1: Vestidos, Pantalones, Camisas
     const group1 = ['Vestidos', 'Pantalones', 'Camisas'];
-    // Group 2: Chaquetas, Interiores
     const group2 = ['Chaquetas', 'Interiores'];
 
-    // Helper to create category item
+    const categoryImages = {
+        'Vestidos': '/img/Vestidos.png',
+        'Pantalones': '/img/Pantalones.png',
+        'Camisas': '/img/Camisas.png',
+        'Chaquetas': '/img/chaquetas.png',
+        'Interiores': '/img/interiores.png'
+    };
+
     const createItem = (cat) => {
         const item = document.createElement('div');
         item.className = 'category-item';
         item.onclick = () => selectCategory(cat);
         item.innerHTML = `
-            <img src="https://via.placeholder.com/200x150?text=${cat}" class="category-img">
+            <img src="${categoryImages[cat]}" class="category-img">
             <div class="category-btn">${cat}</div>
         `;
         return item;
     };
 
-    // Render Group 1
     group1.forEach(cat => grid.appendChild(createItem(cat)));
 
-    // Render Group 2
     group2.forEach(cat => grid.appendChild(createItem(cat)));
 }
 
@@ -452,7 +476,7 @@ function selectCategory(category) {
         const quantity = cartItem ? cartItem.quantity : 1;
 
         const item = document.createElement('div');
-        item.className = 'category-item product-item'; // Added class for hover
+        item.className = 'category-item product-item';
         item.style.display = 'flex';
         item.style.alignItems = 'center';
         item.style.justifyContent = 'space-between';
@@ -463,7 +487,6 @@ function selectCategory(category) {
         item.style.gridColumn = '1/-1';
         item.style.transition = 'background-color 0.2s';
 
-        // Hover effect logic
         item.onmouseenter = () => { item.style.backgroundColor = '#094C62'; item.style.color = 'white'; };
         item.onmouseleave = () => { item.style.backgroundColor = 'transparent'; item.style.color = 'black'; };
 
@@ -500,8 +523,6 @@ function toggleProductSelection(id, context = 'modal') {
     let cart = getCart();
     const index = cart.findIndex(item => item.id === id);
 
-    // Determine IDs based on context (modal, search, suggested)
-    // Actually, we should try to find elements in all contexts to keep them in sync
     const circleModal = document.getElementById(`circle-${id}`);
     const circleSearch = document.getElementById(`circle-search-${id}`);
     const circleSugg = document.getElementById(`circle-sugg-${id}`);
@@ -510,27 +531,23 @@ function toggleProductSelection(id, context = 'modal') {
     const qtyInputSearch = document.getElementById(`qty-search-${id}`);
     const qtyInputSugg = document.getElementById(`qty-sugg-${id}`);
 
-    // Get quantity from the context that triggered the action
     let qty = 1;
     if (context === 'modal' && qtyInputModal) qty = parseInt(qtyInputModal.value);
     else if (context === 'search' && qtyInputSearch) qty = parseInt(qtyInputSearch.value);
     else if (context === 'suggested' && qtyInputSugg) qty = parseInt(qtyInputSugg.value);
     else {
-        // Fallback: try to find any visible input
         if (qtyInputModal) qty = parseInt(qtyInputModal.value);
         else if (qtyInputSearch) qty = parseInt(qtyInputSearch.value);
         else if (qtyInputSugg) qty = parseInt(qtyInputSugg.value);
     }
 
     if (index !== -1) {
-        // Remove from cart
         cart.splice(index, 1);
         const color = 'white';
         if (circleModal) circleModal.style.backgroundColor = color;
         if (circleSearch) circleSearch.style.backgroundColor = color;
         if (circleSugg) circleSugg.style.backgroundColor = color;
     } else {
-        // Add to cart
         const products = getProducts();
         const product = products.find(p => p.id === id);
         if (product) {
@@ -550,8 +567,7 @@ function renderSuggestedProducts() {
     const container = document.getElementById('suggestedProductsList');
     if (!container) return;
 
-    // Use default products as suggested for now
-    const products = getProducts().slice(0, 4); // Take first 4
+    const products = getProducts().slice(0, 4);
     const cart = getCart();
 
     container.innerHTML = '';
@@ -563,9 +579,9 @@ function renderSuggestedProducts() {
 
         const item = document.createElement('div');
         item.className = 'product-card-small';
-        item.style.minWidth = '150px'; // Ensure width
+        item.style.minWidth = '150px';
         item.innerHTML = `
-            <img src="https://via.placeholder.com/150x200" style="width: 100%; border-radius: 5px;">
+            <img src="${p.image || '/img/Vestidos.png'}" style="width: 100%; height: 200px; object-fit: cover; border-radius: 5px;">
             <div style="font-weight: bold; margin-top: 5px;">${p.name}</div>
             <div style="margin-bottom: 5px;">$${p.price}</div>
             <div style="display: flex; align-items: center; justify-content: center; gap: 10px;">
@@ -582,7 +598,6 @@ function renderSuggestedProducts() {
 }
 
 function addToCart() {
-    // Legacy
 }
 
 function renderCart() {
@@ -603,7 +618,7 @@ function renderCart() {
         div.style.justifyContent = 'space-between';
         div.style.alignItems = 'center';
         div.innerHTML = `
-            <span>${item.name} // ${item.code} (x${item.quantity})</span>
+            <span>${item.name}
             <i class="fas fa-trash" style="color: red; cursor: pointer;" onclick="event.stopPropagation(); removeFromCart(${item.id})"></i>
         `;
         list.appendChild(div);
@@ -619,14 +634,11 @@ function removeFromCart(id) {
     saveCart(cart);
 
     if (cart.length === 0) {
-        // Return to main view if cart is empty
         toggleCartView();
         updateCartCounter();
 
-        // Reset visuals
         renderSuggestedProducts();
 
-        // If search result is visible and matches, update it
         const searchResultCard = document.getElementById('salesSearchResult');
         if (searchResultCard && searchResultCard.style.display === 'block') {
             const circleSearch = document.getElementById(`circle-search-${id}`);
@@ -654,7 +666,6 @@ function generatePurchase() {
         changeText.innerText = `Costo total de la compra : ${total} COP`;
     }
 
-    // Clear cart
     saveCart([]);
     openModal('changeModal');
 }
@@ -664,21 +675,18 @@ function resetSalesView() {
     document.getElementById('paymentView').style.display = 'none';
     document.getElementById('initialView').style.display = 'block';
 
-    // Show floating button again (will be disabled/hidden by updateCartCounter if 0)
     const btn = document.getElementById('floatingCartBtn');
     if (btn) btn.style.display = 'flex';
 
     updateCartCounter();
-    renderSuggestedProducts(); // Reset suggested products visuals
+    renderSuggestedProducts();
 
-    // Reset search if needed
     const searchInput = document.getElementById('salesSearchInput');
     if (searchInput) searchInput.value = '';
     document.getElementById('salesSearchResult').style.display = 'none';
 }
 
 
-// --- ADMIN MODULE ---
 
 function renderUsers() {
     const container = document.querySelector('.user-list');
@@ -712,11 +720,9 @@ function openEditUserModal(id) {
     if (!user) return;
 
     userToEditId = id;
-    // Assuming IDs for inputs in editUserModal. I will need to add these IDs in HTML.
     document.getElementById('editUserName').value = user.name;
     document.getElementById('editUserEmail').value = user.email;
     document.getElementById('editUserPhone').value = user.phone;
-    // document.getElementById('editUserRole').value = user.role; // If select exists
 
     openModal('editUserModal');
 }
@@ -731,7 +737,6 @@ function saveEditUser() {
         users[index].name = document.getElementById('editUserName').value;
         users[index].email = document.getElementById('editUserEmail').value;
         users[index].phone = document.getElementById('editUserPhone').value;
-        // users[index].role = document.getElementById('editUserRole').value;
 
         saveUsers(users);
         renderUsers();
@@ -775,7 +780,6 @@ function hideCreateUserView() {
 }
 
 function saveNewUser() {
-    // Need IDs in createUserSection
     const name = document.getElementById('newUserName') ? document.getElementById('newUserName').value : 'Nuevo Usuario';
     const email = document.getElementById('newUserEmail') ? document.getElementById('newUserEmail').value : 'correo@ejemplo.com';
     const phone = document.getElementById('newUserPhone') ? document.getElementById('newUserPhone').value : '0000000000';
@@ -796,11 +800,9 @@ function saveNewUser() {
     renderUsers();
 
     openModal('successCreateUserModal');
-    hideCreateUserView(); // Return to list after success modal closed? Or wait for OK?
-    // The original flow said "La tabla se actualiza", usually implies going back to list.
+    hideCreateUserView();
 }
 
-// Helper for Admin tabs
 function showSection(section) {
     document.getElementById('usersSection').style.display = section === 'users' ? 'block' : 'none';
     document.getElementById('historySection').style.display = section === 'history' ? 'block' : 'none';
@@ -815,7 +817,6 @@ function openReportModal() {
     document.getElementById('reportModal').style.display = 'flex';
 }
 
-// --- LOGOUT FUNCTIONALITY ---
 
 function toggleMenu() {
     const menu = document.getElementById('menuDropdown');
@@ -825,8 +826,6 @@ function toggleMenu() {
 }
 
 function handleLogout() {
-    // Clear session data if any (simulated)
-    localStorage.removeItem('user'); // Example key
-    // Force navigation to login
+    localStorage.removeItem('user');
     window.location.href = '/login';
 }

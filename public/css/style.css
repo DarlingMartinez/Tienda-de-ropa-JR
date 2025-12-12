@@ -1,9 +1,7 @@
 :root {
     --bg-main: #3C96B4;
-    /* Adjusted to match image lighter teal */
     --bg-dark: #094C62;
     --color-primary: #87CEEB;
-    /* Lighter blue for buttons/tabs */
     --color-success: #38B000;
     --color-danger: #E63946;
     --text-color: #333;
@@ -28,7 +26,6 @@ body {
     flex-direction: column;
 }
 
-/* Header */
 .app-header {
     display: flex;
     align-items: center;
@@ -50,14 +47,12 @@ body {
     border: 2px dashed #000;
     padding: 5px;
     background: transparent;
-    /* Or image */
 }
 
 .header-title {
     font-size: 1.5rem;
     font-weight: bold;
     font-family: serif;
-    /* Matches "Administrador" font in image */
 }
 
 .header-menu {
@@ -65,7 +60,6 @@ body {
     cursor: pointer;
 }
 
-/* Navigation Tabs */
 .nav-tabs-container {
     display: flex;
     padding: 0 20px;
@@ -82,7 +76,6 @@ body {
     text-transform: uppercase;
     font-size: 0.9rem;
     margin-right: -5px;
-    /* Overlap slightly */
     z-index: 1;
     text-decoration: none;
     display: inline-block;
@@ -92,21 +85,16 @@ body {
     background-color: white;
     z-index: 2;
     padding-top: 15px;
-    /* Make it slightly taller */
 }
 
-/* Main Content Area */
 .content-wrapper {
     background-color: white;
     flex: 1;
     margin: 0 20px 20px 20px;
     border-radius: 0 20px 20px 20px;
-    /* Top-left is square to merge with tab if first tab is active, but actually images show rounded container */
-    /* Correction: The active tab merges with the white container. */
     border-top-right-radius: 20px;
     border-bottom-left-radius: 20px;
     border-bottom-right-radius: 20px;
-    /* If first tab is active, top-left should be 0. We'll handle this generically or just assume first tab active for now. */
     padding: 30px;
     overflow-y: auto;
     position: relative;
@@ -118,15 +106,12 @@ body {
 
 .content-wrapper.tab-2-active {
     border-top-left-radius: 20px;
-    /* If 2nd tab active, 1st is not, so corner is rounded? Actually CSS tabs are tricky. Let's stick to a simple white card for now. */
 }
 
-/* Specific overrides for the tab look */
 .nav-tab.active {
     box-shadow: 0 -5px 10px rgba(0, 0, 0, 0.05);
 }
 
-/* Login Specific */
 .login-body {
     background-color: var(--bg-main);
     color: white;
@@ -211,7 +196,6 @@ body {
     }
 }
 
-/* Inventory List */
 .inventory-list {
     max-width: 900px;
     margin: 0 auto;
@@ -257,14 +241,12 @@ body {
     cursor: pointer;
 }
 
-/* Modals */
 .modal-overlay {
     background-color: rgba(0, 0, 0, 0.5);
 }
 
 .modal-content-large {
     background-color: #E0F7FA;
-    /* Light blueish background for modal */
     padding: 30px;
     border-radius: 10px;
     max-width: 800px;
@@ -283,9 +265,7 @@ body {
 
 .confirm-overlay {
     background-color: #094C62;
-    /* Solid dark teal */
     color: white;
-    /* Ensure text is white */
 }
 
 .confirm-content {
@@ -294,7 +274,6 @@ body {
     text-align: left;
 }
 
-/* Search Input Styling */
 .search-input {
     background: transparent;
     border: none;
@@ -311,7 +290,6 @@ body {
     font-weight: bold;
 }
 
-/* Sales Module Styles */
 .product-card-small {
     min-width: 150px;
     background-color: #f9f9f9;
@@ -332,14 +310,8 @@ body {
     right: -5px;
 }
 
-/* ============================================
-   RESPONSIVE DESIGN - MEDIA QUERIES
-   ============================================ */
-
-/* Mobile Small: max-width 576px */
 @media (max-width: 576px) {
 
-    /* Header */
     .app-header {
         padding: 8px 15px;
     }
@@ -357,7 +329,6 @@ body {
         font-size: 1.2rem;
     }
 
-    /* Navigation Tabs */
     .nav-tabs-container {
         padding: 0 10px;
         overflow-x: auto;
@@ -370,7 +341,6 @@ body {
         white-space: nowrap;
     }
 
-    /* Content Wrapper */
     .content-wrapper {
         margin: 0 10px 10px 10px;
         padding: 15px;
@@ -402,7 +372,6 @@ body {
         font-size: 0.9rem;
     }
 
-    /* Search Container */
     .search-container {
         padding: 8px 15px;
         max-width: 100%;
@@ -412,7 +381,6 @@ body {
         font-size: 1rem;
     }
 
-    /* Inventory List - Transform to Cards */
     .inventory-list {
         max-width: 100%;
     }
@@ -441,7 +409,6 @@ body {
         margin-left: 0;
     }
 
-    /* Admin Module - Sidebar */
     .admin-layout {
         flex-direction: column;
         gap: 20px;
@@ -464,7 +431,6 @@ body {
         width: 100%;
     }
 
-    /* Sales Module */
     .sales-layout {
         padding-top: 15px;
     }
@@ -473,7 +439,6 @@ body {
         max-width: 100%;
     }
 
-    /* Stack search and selector vertically */
     .initial-view>div>div:first-child {
         flex-direction: column !important;
         gap: 15px !important;
@@ -483,12 +448,10 @@ body {
         margin-bottom: 0 !important;
     }
 
-    /* Suggested Products */
     .product-card-small {
         min-width: 140px;
     }
 
-    /* Floating Cart Button */
     #floatingCartBtn {
         bottom: 15px;
         right: 15px;
@@ -504,7 +467,6 @@ body {
         font-size: 1.3rem;
     }
 
-    /* Payment View */
     .payment-view>div {
         flex-direction: column !important;
     }
@@ -545,12 +507,10 @@ body {
         right: 12px;
     }
 
-    /* Modal Forms - Stack vertically */
     .modal-content-large>div[style*="display: flex"] {
         flex-direction: column !important;
     }
 
-    /* Category Modal Grid */
     .category-grid {
         grid-template-columns: 1fr !important;
         gap: 15px;
@@ -560,16 +520,12 @@ body {
         height: 120px;
     }
 
-    /* Product Modal */
     #productModal .modal-content-large>div {
         flex-direction: column !important;
     }
 }
 
-/* Tablet: 577px - 992px */
 @media (min-width: 577px) and (max-width: 992px) {
-
-    /* Header */
     .header-logo {
         width: 50px;
         height: 50px;
@@ -579,13 +535,11 @@ body {
         font-size: 1.3rem;
     }
 
-    /* Navigation */
     .nav-tab {
         padding: 10px 20px;
         font-size: 0.85rem;
     }
 
-    /* Content */
     .content-wrapper {
         margin: 0 15px 15px 15px;
         padding: 20px;
@@ -596,17 +550,14 @@ body {
         max-width: 450px;
     }
 
-    /* Search */
     .search-container {
         max-width: 100%;
     }
 
-    /* Inventory */
     .inventory-list {
         max-width: 100%;
     }
 
-    /* Admin Sidebar */
     .admin-sidebar {
         width: 200px;
     }
@@ -616,7 +567,6 @@ body {
         font-size: 0.95rem;
     }
 
-    /* Category Grid - 2 columns */
     .category-grid {
         grid-template-columns: repeat(2, 1fr) !important;
     }
@@ -627,12 +577,10 @@ body {
         max-width: 700px;
     }
 
-    /* Floating Cart */
     #floatingCartBtn {
         padding: 12px 25px;
     }
 
-    /* Suggested Products Grid */
     #suggestedProductsList {
         display: grid !important;
         grid-template-columns: repeat(2, 1fr);
@@ -641,10 +589,8 @@ body {
     }
 }
 
-/* Desktop optimizations (993px+) */
 @media (min-width: 993px) {
 
-    /* Ensure max-widths for readability */
     .inventory-list,
     .search-container {
         max-width: 900px;
@@ -655,7 +601,6 @@ body {
     }
 }
 
-/* Utility Classes */
 @media (max-width: 576px) {
     .hide-mobile {
         display: none !important;
