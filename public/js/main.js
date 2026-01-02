@@ -1,9 +1,9 @@
 
 const defaultProducts = [
-    { id: 1, name: 'Pantalon floreado', code: '001', price: 35000, stock: 10, type: 'Pantalon', image: '/img/Pantalon floreado.png' },
-    { id: 2, name: 'Chaqueta de peluche', code: '002', price: 85000, stock: 5, type: 'Chaqueta', image: '/img/Chaqueta de peluche.png' },
-    { id: 3, name: 'Vestido floreado', code: '003', price: 45000, stock: 8, type: 'Vestido', image: '/img/Vestido_floreado.png' },
-    { id: 4, name: 'Vestido', code: '004', price: 40000, stock: 12, type: 'Vestido', image: '/img/Vestidos.png' }
+    { id: 1, name: 'Pantalon floreado', code: '001', price: 35000, stock: 10, type: 'Pantalon', image: './public/img/Pantalon floreado.png' },
+    { id: 2, name: 'Chaqueta de peluche', code: '002', price: 85000, stock: 5, type: 'Chaqueta', image: './public/img/Chaqueta de peluche.png' },
+    { id: 3, name: 'Vestido floreado', code: '003', price: 45000, stock: 8, type: 'Vestido', image: './public/img/Vestido_floreado.png' },
+    { id: 4, name: 'Vestido', code: '004', price: 40000, stock: 12, type: 'Vestido', image: './public/img/Vestidos.png' }
 ];
 
 const defaultUsers = [
@@ -319,7 +319,7 @@ function handleSearch(code) {
         const quantity = cartItem ? cartItem.quantity : 1;
 
         card.innerHTML = `
-            <img src="${product.image || '/img/Vestidos.png'}" style="width: 100px; height: 150px; object-fit: cover; border-radius: 5px;">
+            <img src="${product.image || './public/img/Vestidos.png'}" style="width: 100px; height: 150px; object-fit: cover; border-radius: 5px;">
             <div style="flex: 1;">
                 <h3 style="margin-bottom: 5px;">${product.name} // ${product.code}</h3>
                 <p style="font-weight: bold; margin-bottom: 10px;">$${product.price}</p>
@@ -427,11 +427,11 @@ function renderCategories() {
     const group2 = ['Chaquetas', 'Interiores'];
 
     const categoryImages = {
-        'Vestidos': '/img/Vestidos.png',
-        'Pantalones': '/img/Pantalones.png',
-        'Camisas': '/img/Camisas.png',
-        'Chaquetas': '/img/chaquetas.png',
-        'Interiores': '/img/interiores.png'
+        'Vestidos': './public/img/Vestidos.png',
+        'Pantalones': './public/img/Pantalones.png',
+        'Camisas': './public/img/Camisas.png',
+        'Chaquetas': './public/img/chaquetas.png',
+        'Interiores': './public/img/interiores.png'
     };
 
     const createItem = (cat) => {
@@ -581,7 +581,7 @@ function renderSuggestedProducts() {
         item.className = 'product-card-small';
         item.style.minWidth = '150px';
         item.innerHTML = `
-            <img src="${p.image || '/img/Vestidos.png'}" style="width: 100%; height: 200px; object-fit: cover; border-radius: 5px;">
+            <img src="${p.image || './public/img/Vestidos.png'}" style="width: 100%; height: 200px; object-fit: cover; border-radius: 5px;">
             <div style="font-weight: bold; margin-top: 5px;">${p.name}</div>
             <div style="margin-bottom: 5px;">$${p.price}</div>
             <div style="display: flex; align-items: center; justify-content: center; gap: 10px;">
@@ -827,5 +827,5 @@ function toggleMenu() {
 
 function handleLogout() {
     localStorage.removeItem('user');
-    window.location.href = '/login';
+    window.location.href = './index.html';
 }
